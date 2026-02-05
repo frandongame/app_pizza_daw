@@ -1,0 +1,32 @@
+services:
+  db-env: 
+    image: postgres:16
+    container_name: postgres_tenis
+    restart: always
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: laravel
+    ports:
+      - "5432:5432"
+    
+
+  app-dev: 
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: laravel_app_dev
+    depends_on:
+      - db_dev
+    ports:
+      - 8080:8000
+    environment:
+      DB_CONNECTION: pgsql
+      DB_HOST: db-dev
+      DB_PORT: 5432
+      DB_DATABASE: laravel
+      DB_USERNAME: admin
+      DB_PASSWORD: 1234
+      APP_KEY: ${APP_KEY}
+      APP_ENV: local
+      APP_DEBUG: "true"
